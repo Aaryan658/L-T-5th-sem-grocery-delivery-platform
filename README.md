@@ -7,10 +7,12 @@
 
 | Name | Roll No | Department | Section |
 |---|---|---|---|
-| _fill in_ | _fill in_ | _fill in_ | _fill in_ |
-| _fill in_ | _fill in_ | _fill in_ | _fill in_ |
-| _fill in_ | _fill in_ | _fill in_ | _fill in_ |
-| _fill in_ | _fill in_ | _fill in_ | _fill in_ |
+| A Aaryan Dharrmik | 2460301 | B. Tech CSE | 5 BTCS B |
+| Abhishek R | 2460307 | B. Tech CSE | 5 BTCS B |
+| Adriel B John | 2460314 | B. Tech CSE | 5 BTCS B |
+| Abhay Job K J | 2460485 | B. Tech CSE | 5 BTCS B |
+
+
 
 ## Problem Statement
 
