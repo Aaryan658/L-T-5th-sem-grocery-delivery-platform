@@ -1,0 +1,450 @@
+{
+  "info": {
+    "name": "P19 - Online Grocery Delivery Platform",
+    "description": "Covers every implemented endpoint for the Online Grocery Delivery Platform backend (CIA-3). Set {{baseUrl}} to http://localhost:5000/api and run Auth > Login (or Register) first to populate {{token}} automatically.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "token", "value": "" },
+    { "key": "storeId", "value": "" },
+    { "key": "productId", "value": "" },
+    { "key": "orderId", "value": "" },
+    { "key": "deliveryPartnerUserId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "if (data && data.token) { pm.collectionVariables.set('token', data.token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Asha Kumar\",\n  \"email\": \"customer@grocery.test\",\n  \"password\": \"Passw0rd!\",\n  \"role\": \"customer\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "if (data && data.token) { pm.collectionVariables.set('token', data.token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@grocery.test\",\n  \"password\": \"Passw0rd!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dark-Stores (Module 2)",
+      "item": [
+        {
+          "name": "Create Store (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/stores",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Koramangala Dark Store\",\n  \"area\": \"Koramangala\",\n  \"serviceablePincodes\": [\"560034\", \"560095\"]\n}"
+            }
+          }
+        },
+        {
+          "name": "List Stores",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/stores"
+          }
+        },
+        {
+          "name": "Get Store By Id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/stores/{{storeId}}"
+          }
+        },
+        {
+          "name": "Update Store (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/stores/{{storeId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"area\": \"Koramangala 5th Block\"\n}" }
+          }
+        },
+        {
+          "name": "Deactivate Store (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/stores/{{storeId}}"
+          }
+        },
+        {
+          "name": "Find Nearest Store By Pincode (Module 4)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/stores/nearest?pincode=560034"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products & Store Stock (Module 3, 9)",
+      "item": [
+        {
+          "name": "Create Product (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/products",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amul Toned Milk 1L\",\n  \"category\": \"Dairy\",\n  \"unit\": \"pack\",\n  \"price\": 66\n}"
+            }
+          }
+        },
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/products?category=Dairy&search=milk"
+          }
+        },
+        {
+          "name": "Get Product By Id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/products/{{productId}}"
+          }
+        },
+        {
+          "name": "Update Product (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/products/{{productId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"price\": 70\n}" }
+          }
+        },
+        {
+          "name": "Deactivate Product (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/products/{{productId}}"
+          }
+        },
+        {
+          "name": "Upsert Store Stock (admin/staff)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/stores/{{storeId}}/stock",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 50,\n  \"reorderPoint\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "List Store Stock",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/stores/{{storeId}}/stock"
+          }
+        },
+        {
+          "name": "Update Store Stock",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/stores/{{storeId}}/stock/{{productId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"quantity\": 5\n}" }
+          }
+        },
+        {
+          "name": "Stock Replenishment Alerts (Module 9)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/stores/{{storeId}}/stock/alerts"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders (Modules 4-8, 11)",
+      "item": [
+        {
+          "name": "Place Order (customer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "if (data && data._id) { pm.collectionVariables.set('orderId', data._id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pincode\": \"560034\",\n  \"items\": [ { \"productId\": \"{{productId}}\", \"quantity\": 2 } ],\n  \"deliveryAddress\": { \"line1\": \"12 MG Road\", \"area\": \"Koramangala\", \"pincode\": \"560034\" }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Order By Id (Module 8)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/orders/{{orderId}}"
+          }
+        },
+        {
+          "name": "My Order History (Module 11)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/orders/my"
+          }
+        },
+        {
+          "name": "Reorder (Module 11)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/orders/{{orderId}}/reorder"
+          }
+        },
+        {
+          "name": "Store Order Queue (Module 5, staff)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/stores/{{storeId}}/orders?status=placed"
+          }
+        },
+        {
+          "name": "Pick Order (Module 5, staff)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/orders/{{orderId}}/pick"
+          }
+        },
+        {
+          "name": "Pack Order (Module 5, staff)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/orders/{{orderId}}/pack"
+          }
+        },
+        {
+          "name": "List Available Delivery Partners (Module 6)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/delivery-partners/available?storeId={{storeId}}"
+          }
+        },
+        {
+          "name": "Assign Delivery Partner (Module 6, staff)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/assign",
+            "body": { "mode": "raw", "raw": "{\n  \"deliveryPartnerId\": \"{{deliveryPartnerUserId}}\"\n}" }
+          }
+        },
+        {
+          "name": "Update Delivery Status (Module 7, partner)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/status",
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"out-for-delivery\",\n  \"note\": \"Picked up from store\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delivery Partner Self-Service",
+      "item": [
+        {
+          "name": "Get My Partner Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/delivery-partners/me"
+          }
+        },
+        {
+          "name": "Update My Availability",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/delivery-partners/me/availability",
+            "body": { "mode": "raw", "raw": "{\n  \"isAvailable\": true\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delivery Slots (Module 10)",
+      "item": [
+        {
+          "name": "Get Available Delivery Slots",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/slots"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Reports (Module 12)",
+      "item": [
+        {
+          "name": "Store & Delivery Performance Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/reports/performance"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Negative / Edge Cases (Testing Checklist)",
+      "item": [
+        {
+          "name": "401 - No Token",
+          "request": { "method": "GET", "url": "{{baseUrl}}/orders/my" }
+        },
+        {
+          "name": "400 - Register Missing Fields",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register",
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"bad@example.com\"\n}" }
+          }
+        },
+        {
+          "name": "403 - Customer Calls Admin-Only Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/reports/performance"
+          }
+        },
+        {
+          "name": "404 - Order With Invalid Id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/orders/000000000000000000000000"
+          }
+        },
+        {
+          "name": "409 - Place Order With Out-of-Stock Quantity",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pincode\": \"560034\",\n  \"items\": [ { \"productId\": \"{{productId}}\", \"quantity\": 999999 } ],\n  \"deliveryAddress\": { \"line1\": \"12 MG Road\", \"pincode\": \"560034\" }\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

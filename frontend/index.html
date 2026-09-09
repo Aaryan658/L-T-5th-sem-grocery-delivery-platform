@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grocery Delivery Platform - Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">🛒 Grocery Delivery Platform</span>
+    <span id="whoami" class="whoami"></span>
+    <button id="logoutBtn" class="link-btn" hidden>Logout</button>
+  </div>
+
+  <div class="container">
+
+    <!-- AUTH VIEW -->
+    <div id="authView" class="card">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="loginForm">Login</button>
+        <button class="tab-btn" data-tab="registerForm">Register</button>
+      </div>
+
+      <form id="loginForm" class="form active">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required />
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <p class="hint">Seed accounts (password <code>Passw0rd!</code>): admin@grocery.test, staff@grocery.test, customer@grocery.test, partner@grocery.test</p>
+      </form>
+
+      <form id="registerForm" class="form">
+        <h2>Register</h2>
+        <input type="text" id="regName" placeholder="Full name" required />
+        <input type="email" id="regEmail" placeholder="Email" required />
+        <input type="password" id="regPassword" placeholder="Password (min 6 chars)" required />
+        <input type="text" id="regPhone" placeholder="Phone (optional)" />
+        <select id="regRole">
+          <option value="customer">Customer</option>
+          <option value="storeStaff">Store Staff</option>
+          <option value="deliveryPartner">Delivery Partner</option>
+          <option value="admin">Admin</option>
+        </select>
+        <input type="text" id="regStoreId" placeholder="Store ID (storeStaff only)" />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <!-- CUSTOMER VIEW -->
+    <div id="customerView" class="dashboard" hidden>
+      <div class="card">
+        <h2>Find Your Store &amp; Browse Products</h2>
+        <div class="row">
+          <input type="text" id="custPincode" placeholder="Delivery pincode e.g. 560034" />
+          <button id="findStoreBtn">Find Nearest Store</button>
+        </div>
+        <div id="storeResult" class="hint"></div>
+        <div id="productList" class="product-grid"></div>
+      </div>
+
+      <div class="card">
+        <h2>Cart &amp; Checkout</h2>
+        <div id="cartList"></div>
+        <input type="text" id="addrLine1" placeholder="Delivery address line" />
+        <select id="slotSelect"><option value="">No preference</option></select>
+        <button id="placeOrderBtn">Place Order</button>
+      </div>
+
+      <div class="card">
+        <h2>My Orders</h2>
+        <button id="refreshOrdersBtn">Refresh</button>
+        <div id="myOrdersList"></div>
+      </div>
+    </div>
+
+    <!-- STORE STAFF VIEW -->
+    <div id="staffView" class="dashboard" hidden>
+      <div class="card">
+        <h2>Store Order Queue</h2>
+        <button id="refreshStaffOrdersBtn">Refresh</button>
+        <div id="staffOrdersList"></div>
+      </div>
+      <div class="card">
+        <h2>Stock Replenishment Alerts</h2>
+        <button id="refreshAlertsBtn">Refresh</button>
+        <div id="alertsList"></div>
+      </div>
+    </div>
+
+    <!-- DELIVERY PARTNER VIEW -->
+    <div id="partnerView" class="dashboard" hidden>
+      <div class="card">
+        <h2>My Availability</h2>
+        <label><input type="checkbox" id="availabilityToggle" /> Available for assignment</label>
+      </div>
+      <div class="card">
+        <h2>My Assigned Order</h2>
+        <input type="text" id="partnerOrderId" placeholder="Order ID" />
+        <button id="loadPartnerOrderBtn">Load Order</button>
+        <div id="partnerOrderDetail"></div>
+        <div class="row">
+          <button data-status="out-for-delivery" class="status-btn">Mark Out for Delivery</button>
+          <button data-status="delivered" class="status-btn">Mark Delivered</button>
+          <button data-status="failed" class="status-btn">Mark Failed</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN VIEW -->
+    <div id="adminView" class="dashboard" hidden>
+      <div class="card full-width">
+        <h2>Performance Report</h2>
+        <button id="refreshReportBtn">Refresh</button>
+        <div class="table-wrap">
+          <table id="reportTable">
+            <thead><tr><th>Store</th><th>Orders</th><th>Delivered</th><th>Failed</th><th>Avg Pick (min)</th><th>Avg Delivery (min)</th><th>Revenue</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Create Dark-Store</h2>
+        <input type="text" id="newStoreName" placeholder="Store name" />
+        <input type="text" id="newStoreArea" placeholder="Area" />
+        <input type="text" id="newStorePincodes" placeholder="Serviceable pincodes (comma-separated)" />
+        <button id="createStoreBtn">Create Store</button>
+      </div>
+      <div class="card">
+        <h2>Create Product</h2>
+        <input type="text" id="newProdName" placeholder="Product name" />
+        <input type="text" id="newProdCategory" placeholder="Category" />
+        <input type="number" id="newProdPrice" placeholder="Price" />
+        <button id="createProductBtn">Create Product</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
